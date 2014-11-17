@@ -190,6 +190,7 @@ class blastServlet(phamServlet, Subscriber, Thread):
     self.busy = False
     self._logger = logger.logger(logging)
     self.status = 'avail'
+    print "blastserverlet started"
 
   def request_db_info(self):
     '''phamClient needs this info to get a proper database cursor, but it also needs a valid username/password pair'''
@@ -345,7 +346,7 @@ class phamServer(errorHandler):
     self._logger.log('Clearing stale alignments.')
     try: self.c.execute("UPDATE clustalw SET score = NULL, node_id = NULL, status = 'avail' WHERE status = 'pending' OR status = 'stale'")
     except: self.show_sql_errors(self.c)
-    try: self.c.execute("UPDATE blast SET score = NULL, node_id = NULL, status = 'avail' WHERE status = 'pending' OR status = 'stale'")
+    try: self.c.execute("UPDATE blast SET score = NULL, node_id = NULL, status = 'avail' WHERE status = 'pending' OR status = 'stale'"); print "this one did it!"
     except: self.show_sql_errors(self.c)
     try: self.c.execute("COMMIT")
     except: self.show_sql_errors(self.c)
@@ -389,7 +390,7 @@ def main():
   ns=Pyro.naming.NameServerLocator().getNS(host=nsname)
   daemon.useNameServer(ns)
   _logger = logger.logger(logging)
-  c =         db_conf.db_conf(username=username, password=password, server=opts['server'], db=database).get_cursor()
+  c =db_conf.db_conf(username=username, password=password, server=opts['server'], db=database).get_cursor()
   try: c.execute("SET SESSION wait_timeout=2629740;")
   except: self.show_sql_errors(c)  
   csrCursor = db_conf.db_conf(username=username, password=password, server=opts['server'], db=database).get_cursor()

@@ -13,9 +13,9 @@ def fix(tally, dirname, filenames):
     print 'processing %s...' % filename
     infile = open(os.path.join(dirname, filename), 'U')
     
-    data=infile.read()
-    udata=data.decode("utf-8")
-    asciidata=udata.encode("ascii","ignore")
+    asciidata=infile.read()
+    # udata=data.decode("utf-8")
+    # asciidata=udata.encode("ascii","ignore")
     
     #print infile.newlines
     outfile = open(os.path.join(dirname, filename + '.fixed'), 'w')
